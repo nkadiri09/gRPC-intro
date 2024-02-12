@@ -14,7 +14,7 @@ public class AccountDatabase {
         return accountMap.get(accountId);
     }
 
-    public static Integer addBalance(Integer accountId, int amount) {
+    public static Integer depositAmount(Integer accountId, int amount) {
         return accountMap.computeIfPresent(accountId, (k, v) -> v + amount);
     }
 

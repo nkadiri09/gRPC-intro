@@ -1,13 +1,18 @@
 package com.naren.client;
 
+import com.google.common.util.concurrent.Uninterruptibles;
 import com.naren.models.*;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.stub.StreamObserver;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.util.Iterator;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class BankServiceTest {
@@ -23,6 +28,7 @@ public class BankServiceTest {
                 .build();
 
         this.bankServiceBlockingStub = BankServiceGrpc.newBlockingStub(localhost);
+        this.bankServiceStub = BankServiceGrpc.newStub(localhost);
     }
 
     @Test
@@ -42,9 +48,22 @@ public class BankServiceTest {
 
     @Test
     public void withDrawAsyncTest(){
+        CountDownLatch latch = new CountDownLatch(1);
         WithDrawRequest withDrawRequest = WithDrawRequest.newBuilder().setAccountNumber(8).setAmount(50).build();
-        this.bankServiceStub.withdraw(withDrawRequest, new MoneyStreamingResponse());
+        this.bankServiceStub.withdraw(withDrawRequest, new MoneyStreamingResponse(latch));
+        Uninterruptibles.sleepUninterruptibly(6, TimeUnit.SECONDS);
+    }
 
+    @Test
+    public void cashDepositTest() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        StreamObserver<DepositRequest> depositRequestStreamObserver = this.bankServiceStub.cashDeposit(new BalanceStreamObserver(latch));
+        for (int i = 0; i < 10; i++) {
+            DepositRequest depositRequest = DepositRequest.newBuilder().setAccountNumber(10).setAmount(5).build();
+            depositRequestStreamObserver.onNext(depositRequest);
+        }
+        depositRequestStreamObserver.onCompleted();
+        latch.await();
     }
 
 }
