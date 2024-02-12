@@ -46,6 +46,37 @@ public final class BankServiceGrpc {
     return getGetBalanceMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<com.naren.models.WithDrawRequest,
+      com.naren.models.Money> getWithdrawMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "withdraw",
+      requestType = com.naren.models.WithDrawRequest.class,
+      responseType = com.naren.models.Money.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+  public static io.grpc.MethodDescriptor<com.naren.models.WithDrawRequest,
+      com.naren.models.Money> getWithdrawMethod() {
+    io.grpc.MethodDescriptor<com.naren.models.WithDrawRequest, com.naren.models.Money> getWithdrawMethod;
+    if ((getWithdrawMethod = BankServiceGrpc.getWithdrawMethod) == null) {
+      synchronized (BankServiceGrpc.class) {
+        if ((getWithdrawMethod = BankServiceGrpc.getWithdrawMethod) == null) {
+          BankServiceGrpc.getWithdrawMethod = getWithdrawMethod =
+              io.grpc.MethodDescriptor.<com.naren.models.WithDrawRequest, com.naren.models.Money>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "withdraw"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.naren.models.WithDrawRequest.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  com.naren.models.Money.getDefaultInstance()))
+              .setSchemaDescriptor(new BankServiceMethodDescriptorSupplier("withdraw"))
+              .build();
+        }
+      }
+    }
+    return getWithdrawMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
@@ -100,6 +131,13 @@ public final class BankServiceGrpc {
         io.grpc.stub.StreamObserver<com.naren.models.Balance> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetBalanceMethod(), responseObserver);
     }
+
+    /**
+     */
+    default void withdraw(com.naren.models.WithDrawRequest request,
+        io.grpc.stub.StreamObserver<com.naren.models.Money> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getWithdrawMethod(), responseObserver);
+    }
   }
 
   /**
@@ -136,6 +174,14 @@ public final class BankServiceGrpc {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getGetBalanceMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void withdraw(com.naren.models.WithDrawRequest request,
+        io.grpc.stub.StreamObserver<com.naren.models.Money> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncServerStreamingCall(
+          getChannel().newCall(getWithdrawMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
@@ -159,6 +205,14 @@ public final class BankServiceGrpc {
     public com.naren.models.Balance getBalance(com.naren.models.BalanceCheckRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getGetBalanceMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public java.util.Iterator<com.naren.models.Money> withdraw(
+        com.naren.models.WithDrawRequest request) {
+      return io.grpc.stub.ClientCalls.blockingServerStreamingCall(
+          getChannel(), getWithdrawMethod(), getCallOptions(), request);
     }
   }
 
@@ -188,6 +242,7 @@ public final class BankServiceGrpc {
   }
 
   private static final int METHODID_GET_BALANCE = 0;
+  private static final int METHODID_WITHDRAW = 1;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -209,6 +264,10 @@ public final class BankServiceGrpc {
         case METHODID_GET_BALANCE:
           serviceImpl.getBalance((com.naren.models.BalanceCheckRequest) request,
               (io.grpc.stub.StreamObserver<com.naren.models.Balance>) responseObserver);
+          break;
+        case METHODID_WITHDRAW:
+          serviceImpl.withdraw((com.naren.models.WithDrawRequest) request,
+              (io.grpc.stub.StreamObserver<com.naren.models.Money>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -235,6 +294,13 @@ public final class BankServiceGrpc {
               com.naren.models.BalanceCheckRequest,
               com.naren.models.Balance>(
                 service, METHODID_GET_BALANCE)))
+        .addMethod(
+          getWithdrawMethod(),
+          io.grpc.stub.ServerCalls.asyncServerStreamingCall(
+            new MethodHandlers<
+              com.naren.models.WithDrawRequest,
+              com.naren.models.Money>(
+                service, METHODID_WITHDRAW)))
         .build();
   }
 
@@ -284,6 +350,7 @@ public final class BankServiceGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new BankServiceFileDescriptorSupplier())
               .addMethod(getGetBalanceMethod())
+              .addMethod(getWithdrawMethod())
               .build();
         }
       }
