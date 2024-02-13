@@ -7,7 +7,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class TransferStreamingResponse implements StreamObserver<TransferResponse> {
 
-    private CountDownLatch latch;
+    private final CountDownLatch latch;
 
     public TransferStreamingResponse(CountDownLatch latch) {
         this.latch = latch;
@@ -17,8 +17,9 @@ public class TransferStreamingResponse implements StreamObserver<TransferRespons
     public void onNext(TransferResponse transferResponse) {
         System.out.println(transferResponse.getStatus());
         transferResponse.getAccountsList().stream()
-                .map(account -> account.getAccountNumber()+":"+account.getAmount())
+                .map(account -> account.getAccountNumber()+" : "+account.getAmount())
                 .forEach(System.out::println);
+        System.out.println("-----------------------------");
     }
 
     @Override

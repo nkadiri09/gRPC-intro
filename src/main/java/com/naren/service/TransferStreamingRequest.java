@@ -8,7 +8,7 @@ import io.grpc.stub.StreamObserver;
 
 public class TransferStreamingRequest implements StreamObserver<TransferRequest> {
 
-    private StreamObserver<TransferResponse> transferResponseStreamObserver;
+    private final StreamObserver<TransferResponse> transferResponseStreamObserver;
 
     public TransferStreamingRequest(StreamObserver<TransferResponse> transferResponseStreamObserver) {
         this.transferResponseStreamObserver = transferResponseStreamObserver;
@@ -48,7 +48,7 @@ public class TransferStreamingRequest implements StreamObserver<TransferRequest>
 
     @Override
     public void onCompleted() {
-        System.out.println(AccountDatabase.printAccountDetails());
+        AccountDatabase.printAccountDetails();
         transferResponseStreamObserver.onCompleted();
     }
 }
