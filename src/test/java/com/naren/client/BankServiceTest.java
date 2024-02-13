@@ -2,6 +2,7 @@ package com.naren.client;
 
 import com.google.common.util.concurrent.Uninterruptibles;
 import com.naren.models.*;
+import io.grpc.Deadline;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.stub.StreamObserver;
@@ -34,7 +35,8 @@ public class BankServiceTest {
     @Test
     public void balanceTest() {
         BalanceCheckRequest build = BalanceCheckRequest.newBuilder().setAccountNumber(7).build();
-        Balance balance = this.bankServiceBlockingStub.getBalance(build);
+        Balance balance = this.bankServiceBlockingStub
+                .withDeadline(Deadline.after(2, TimeUnit.SECONDS)).getBalance(build);
         System.out.println("Balance is: " + balance.getAmount());
     }
 
