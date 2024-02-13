@@ -7,7 +7,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class BalanceStreamObserver implements StreamObserver<Balance> {
 
-    private CountDownLatch latch;
+    private final CountDownLatch latch;
 
     public BalanceStreamObserver(CountDownLatch latch) {
         this.latch = latch;

@@ -1,6 +1,5 @@
 package com.naren.service;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -20,6 +19,10 @@ public class AccountDatabase {
 
     public static Integer deductBalance(Integer accountId, int amount) {
         return accountMap.computeIfPresent(accountId, (k, v) -> v - amount);
+    }
+
+    public static Map<Integer, Integer> printAccountDetails() {
+        return accountMap;
     }
 
 }

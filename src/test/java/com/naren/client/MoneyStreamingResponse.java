@@ -7,7 +7,7 @@ import java.util.concurrent.CountDownLatch;
 
 public class MoneyStreamingResponse implements StreamObserver<Money> {
 
-    private CountDownLatch latch;
+    private final CountDownLatch latch;
 
     public MoneyStreamingResponse(CountDownLatch latch) {
         this.latch = latch;
